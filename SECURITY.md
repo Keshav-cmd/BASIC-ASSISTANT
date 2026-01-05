@@ -8,7 +8,7 @@ Only the current version of this project is supported.
 
 ## Reporting a Vulnerability
 
-If you find a security vulnerability in this project, please do not open a public issue. Instead, please send an email directly to [YOUR_EMAIL@ADDRESS.com].
+If you find a security vulnerability in this project, please do not open a public issue. Instead, please send an email directly to [keshavjha15000@gmail.com].
 
 ## Privacy & Data Handling
 
