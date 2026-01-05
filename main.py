@@ -4,8 +4,8 @@ import os
 import webbrowser
 import datetime
 import pyttsx3
-import wikipedia  # New import for Wikipedia search
-import platform   # New import for system info
+import wikipedia  # Import for Wikipedia search
+import platform   # Import for system info
 
 # --- Initialize the text-to-speech engine ---
 engine = pyttsx3.init()
@@ -72,10 +72,9 @@ if __name__ == '__main__':
             # This command is for Linux Mint/Ubuntu
             os.system("xdg-open .")
 
-        # --- NEW FEATURES START HERE ---
+        # --- PREVIOUSLY ADDED FEATURES ---
 
         elif "search for" in query:
-            # Extracts the part after "search for" and Googles it
             search_term = query.replace("search for", "")
             say(f"Searching Google for {search_term}")
             webbrowser.open(f"https://www.google.com/search?q={search_term}")
@@ -118,13 +117,81 @@ if __name__ == '__main__':
             webbrowser.open("https://www.spotify.com")
 
         elif "play music" in query:
-            # Opens a generic music search or a specific playlist
             say("Opening music on YouTube.")
             webbrowser.open("https://www.youtube.com/results?search_query=music")
 
         elif "clear screen" in query or "clear terminal" in query:
             say("Clearing the terminal screen.")
             os.system("clear") # Use 'cls' if you are on Windows
+
+        # --- NEW FEATURES START HERE ---
+
+        elif "calculate" in query:
+            # Simple math calculator
+            try:
+                # Extract the part after "calculate"
+                expr = query.replace("calculate", "")
+                print(f"Calculating: {expr}")
+                # eval evaluates a string as a python expression (e.g., "5 + 3")
+                result = eval(expr) 
+                say(f"The result is {result}")
+            except Exception:
+                say("Sorry, I couldn't calculate that. Please say it like 'calculate 5 plus 3'.")
+
+        elif "take a screenshot" in query or "screenshot" in query:
+            try:
+                import pyautogui
+                say("Taking a screenshot in 3 seconds.")
+                # Sleep to give time to switch windows if needed
+                import time
+                time.sleep(3)
+                img = pyautogui.screenshot()
+                img.save("screenshot.png")
+                say("Screenshot saved to your folder.")
+            except ImportError:
+                say("You need to install pyautogui to use this feature.")
+            except Exception as e:
+                say("Could not take screenshot.")
+
+        elif "tell me a joke" in query or "joke" in query:
+            try:
+                import pyjokes
+                joke = pyjokes.get_joke()
+                say(joke)
+            except ImportError:
+                say("You need to install pyjokes to hear jokes.")
+            except Exception:
+                say("I couldn't think of a joke right now.")
+
+        elif "make a note" in query or "remember this" in query:
+            try:
+                note = query.replace("make a note", "").replace("remember this", "")
+                with open("notes.txt", "a") as f:
+                    f.write(note + "\n")
+                say("I have saved that note to a file.")
+            except Exception:
+                say("Sorry, I couldn't save the note.")
+
+        elif "read notes" in query or "show notes" in query:
+            try:
+                with open("notes.txt", "r") as f:
+                    content = f.read()
+                if content:
+                    say("Here are your notes:")
+                    print(content)
+                    # Reading long text can be buggy with TTS, so we print it too
+                    say(content) 
+                else:
+                    say("You have no saved notes.")
+            except FileNotFoundError:
+                say("You don't have any saved notes yet.")
+            except Exception:
+                say("Sorry, I couldn't read the notes.")
+
+        elif "weather" in query:
+            say("Showing weather in your browser.")
+            # Google weather detects location automatically
+            webbrowser.open("https://www.google.com/search?q=weather")
 
         # --- EXIT COMMANDS ---
         
@@ -133,5 +200,7 @@ if __name__ == '__main__':
             exit()
         
         # This is the fallback for when no command is recognized
-        elif query: # Only respond if the query is not empty
-            say("I can do simple tasks like open websites, tell the time, or search Wikipedia. Please try a different command.")
+        elif query: 
+            say("I can do simple tasks like open websites, tell the time, take notes, or search Wikipedia. Please try a different command.")
+
+
