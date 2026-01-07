@@ -1,4 +1,3 @@
-
 import speech_recognition as sr
 import os
 import webbrowser
@@ -193,6 +192,249 @@ if __name__ == '__main__':
             # Google weather detects location automatically
             webbrowser.open("https://www.google.com/search?q=weather")
 
+        # --- ADDITIONAL NEW FEATURES ---
+
+        elif "open reddit" in query:
+            say("Opening Reddit.")
+            webbrowser.open("https://www.reddit.com")
+
+        elif "open twitter" in query or "open x" in query:
+            say("Opening Twitter.")
+            webbrowser.open("https://www.twitter.com")
+
+        elif "open instagram" in query:
+            say("Opening Instagram.")
+            webbrowser.open("https://www.instagram.com")
+
+        elif "open linkedin" in query:
+            say("Opening LinkedIn.")
+            webbrowser.open("https://www.linkedin.com")
+
+        elif "open facebook" in query:
+            say("Opening Facebook.")
+            webbrowser.open("https://www.facebook.com")
+
+        elif "open amazon" in query:
+            say("Opening Amazon.")
+            webbrowser.open("https://www.amazon.com")
+
+        elif "open netflix" in query:
+            say("Opening Netflix.")
+            webbrowser.open("https://www.netflix.com")
+
+        elif "open whatsapp" in query:
+            say("Opening WhatsApp Web.")
+            webbrowser.open("https://web.whatsapp.com")
+
+        elif "open discord" in query:
+            say("Opening Discord.")
+            webbrowser.open("https://discord.com/app")
+
+        elif "battery" in query or "battery status" in query:
+            try:
+                import psutil
+                battery = psutil.sensors_battery()
+                if battery:
+                    percent = battery.percent
+                    plugged = battery.power_plugged
+                    status = "plugged in" if plugged else "not plugged in"
+                    say(f"Battery is at {percent} percent and {status}")
+                else:
+                    say("Could not detect battery information.")
+            except ImportError:
+                say("You need to install psutil to check battery status.")
+            except Exception:
+                say("Could not retrieve battery information.")
+
+        elif "cpu usage" in query or "cpu" in query:
+            try:
+                import psutil
+                cpu_percent = psutil.cpu_percent(interval=1)
+                say(f"CPU usage is at {cpu_percent} percent")
+            except ImportError:
+                say("You need to install psutil to check CPU usage.")
+            except Exception:
+                say("Could not retrieve CPU information.")
+
+        elif "memory usage" in query or "ram usage" in query:
+            try:
+                import psutil
+                memory = psutil.virtual_memory()
+                say(f"Memory usage is at {memory.percent} percent")
+            except ImportError:
+                say("You need to install psutil to check memory usage.")
+            except Exception:
+                say("Could not retrieve memory information.")
+
+        elif "set alarm" in query or "alarm" in query:
+            try:
+                import time
+                say("For how many seconds from now?")
+                alarm_time = takeCommand()
+                seconds = int(''.join(filter(str.isdigit, alarm_time)))
+                say(f"Setting alarm for {seconds} seconds from now.")
+                time.sleep(seconds)
+                say("Wake up! Your alarm is ringing!")
+                for i in range(3):
+                    print("\a")  # System beep
+            except Exception:
+                say("Sorry, I couldn't set the alarm.")
+
+        elif "set timer" in query or "timer" in query:
+            try:
+                import time
+                say("For how many seconds?")
+                timer_input = takeCommand()
+                seconds = int(''.join(filter(str.isdigit, timer_input)))
+                say(f"Timer set for {seconds} seconds.")
+                time.sleep(seconds)
+                say("Time's up!")
+                for i in range(3):
+                    print("\a")
+            except Exception:
+                say("Sorry, I couldn't set the timer.")
+
+        elif "flip a coin" in query or "coin flip" in query:
+            import random
+            result = random.choice(["Heads", "Tails"])
+            say(f"The coin landed on {result}")
+
+        elif "roll a dice" in query or "roll dice" in query:
+            import random
+            result = random.randint(1, 6)
+            say(f"You rolled a {result}")
+
+        elif "random number" in query:
+            import random
+            number = random.randint(1, 100)
+            say(f"Your random number is {number}")
+
+        elif "ip address" in query or "my ip" in query:
+            try:
+                import socket
+                hostname = socket.gethostname()
+                ip_address = socket.gethostbyname(hostname)
+                say(f"Your local IP address is {ip_address}")
+            except Exception:
+                say("Could not retrieve IP address.")
+
+        elif "search youtube for" in query:
+            search_term = query.replace("search youtube for", "")
+            say(f"Searching YouTube for {search_term}")
+            webbrowser.open(f"https://www.youtube.com/results?search_query={search_term}")
+
+        elif "news" in query:
+            say("Opening Google News.")
+            webbrowser.open("https://news.google.com")
+
+        elif "maps" in query or "open maps" in query:
+            say("Opening Google Maps.")
+            webbrowser.open("https://www.google.com/maps")
+
+        elif "translate" in query:
+            say("Opening Google Translate.")
+            webbrowser.open("https://translate.google.com")
+
+        elif "delete notes" in query or "clear notes" in query:
+            try:
+                with open("notes.txt", "w") as f:
+                    f.write("")
+                say("All notes have been deleted.")
+            except Exception:
+                say("Could not delete notes.")
+
+        elif "shutdown" in query or "shutdown system" in query:
+            say("Shutting down the system in 10 seconds. Say cancel to stop.")
+            import time
+            time.sleep(5)
+            # Uncomment the line below to actually shutdown (use with caution!)
+            # os.system("shutdown now")  # Linux
+            # os.system("shutdown /s /t 1")  # Windows
+            say("Shutdown cancelled for safety. Uncomment code to enable.")
+
+        elif "restart" in query or "restart system" in query:
+            say("Restarting the system in 10 seconds. Say cancel to stop.")
+            import time
+            time.sleep(5)
+            # Uncomment the line below to actually restart (use with caution!)
+            # os.system("reboot")  # Linux
+            # os.system("shutdown /r /t 1")  # Windows
+            say("Restart cancelled for safety. Uncomment code to enable.")
+
+        elif "lock screen" in query or "lock system" in query:
+            say("Locking the screen.")
+            # os.system("gnome-screensaver-command -l")  # Linux Mint/Ubuntu
+            # os.system("rundll32.exe user32.dll,LockWorkStation")  # Windows
+            say("Lock command is commented out for safety. Uncomment to enable.")
+
+        elif "create folder" in query or "new folder" in query:
+            try:
+                say("What should I name the folder?")
+                folder_name = takeCommand()
+                os.makedirs(folder_name, exist_ok=True)
+                say(f"Folder {folder_name} created successfully.")
+            except Exception:
+                say("Could not create folder.")
+
+        elif "list files" in query or "show files" in query:
+            try:
+                files = os.listdir(".")
+                say(f"You have {len(files)} files and folders here.")
+                print(files)
+            except Exception:
+                say("Could not list files.")
+
+        elif "volume up" in query or "increase volume" in query:
+            say("Increasing volume.")
+            # os.system("amixer -D pulse sset Master 10%+")  # Linux
+            # For Windows, you'd need a different approach
+            say("Volume control is system-specific. Uncomment appropriate command.")
+
+        elif "volume down" in query or "decrease volume" in query:
+            say("Decreasing volume.")
+            # os.system("amixer -D pulse sset Master 10%-")  # Linux
+            say("Volume control is system-specific. Uncomment appropriate command.")
+
+        elif "mute" in query:
+            say("Muting volume.")
+            # os.system("amixer -D pulse sset Master mute")  # Linux
+            say("Mute control is system-specific. Uncomment appropriate command.")
+
+        elif "unmute" in query:
+            say("Unmuting volume.")
+            # os.system("amixer -D pulse sset Master unmute")  # Linux
+            say("Unmute control is system-specific. Uncomment appropriate command.")
+
+        elif "day of week" in query or "what day" in query:
+            day = datetime.datetime.now().strftime("%A")
+            say(f"Today is {day}")
+
+        elif "month" in query or "what month" in query:
+            month = datetime.datetime.now().strftime("%B")
+            say(f"The current month is {month}")
+
+        elif "year" in query or "what year" in query:
+            year = datetime.datetime.now().strftime("%Y")
+            say(f"The current year is {year}")
+
+        elif "motivate me" in query or "motivation" in query:
+            import random
+            quotes = [
+                "Believe you can and you're halfway there.",
+                "The only way to do great work is to love what you do.",
+                "Don't watch the clock; do what it does. Keep going.",
+                "The future belongs to those who believe in the beauty of their dreams.",
+                "Success is not final, failure is not fatal: It is the courage to continue that counts."
+            ]
+            say(random.choice(quotes))
+
+        elif "speed test" in query or "internet speed" in query:
+            say("Opening speed test in browser.")
+            webbrowser.open("https://fast.com")
+
+        elif "help" in query or "what can you do" in query:
+            say("I can open websites, tell time and date, search Wikipedia, take notes, tell jokes, calculate math, take screenshots, check system info, battery, CPU, memory, set timers, flip coins, and much more. Just ask!")
+
         # --- EXIT COMMANDS ---
         
         elif "quit" in query or "exit" in query or "sleep" in query:
@@ -202,5 +444,3 @@ if __name__ == '__main__':
         # This is the fallback for when no command is recognized
         elif query: 
             say("I can do simple tasks like open websites, tell the time, take notes, or search Wikipedia. Please try a different command.")
-
-
